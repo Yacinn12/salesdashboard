@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil - M'Elle Make Up{% endblock %}
+
+{% block extra_css %}
+<style>
+    .intro {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .intro h2 {
+        font-family: 'Playfair Display', serif;
+        color: #a67c52;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .intro p {
+        font-size: 1.1rem;
+        color: #888;
+        font-weight: 300;
+        letter-spacing: 0.3px;
+    }
+    
+    .prestations {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2.5rem;
+        margin-top: 3rem;
+    }
+    
+    .prestation-card {
+        background: white;
+        border: 2px solid #f0e6d8;
+        padding: 2.5rem 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .prestation-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
+        opacity: 0;
+        transition: all 0.4s ease;
+        z-index: -1;
+    }
+    
+    .prestation-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(212, 165, 116, 0.25);
+        border-color: #d4a574;
+    }
+    
+    .prestation-card:hover h3 {
+        color: #d4a574;
+    }
+    
+    .prestation-card h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        color: #a67c52;
+        transition: all 0.3s ease;
+        letter-spacing: 0.5px;
+    }
+    
+    .prestation-card .description {
+        color: #888;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
+    
+    .options {
+        background: #faf9f7;
+        border-radius: 8px;
+        padding: 1.2rem;
+        margin: 1.5rem 0;
+        text-align: left;
+    }
+    
+    .option-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f0e6d8;
+        gap: 1rem;
+    }
+    
+    .option-item:last-child {
+        border-bottom: none;
+    }
+    
+    .option-name {
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .option-prix {
+        color: #d4a574;
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 1rem 2.5rem;
+        background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        background: linear-gradient(135deg, #a67c52 0%, #d4a574 100%);
+    }
+    
+    .btn:active {
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="intro">
+    <h2>✨ Bienvenue ✨</h2>
+    <p>Explorez nos prestations exclusives et réservez votre rendez-vous en quelques clics</p>
+</div>
+
+{% if prestations %}
+    <div class="prestations">
+        {% for prestation in prestations %}
+            <div class="prestation-card">
+                <h3>{{ prestation.nom }}</h3>
+                {% if prestation.description %}
+                    <p class="description">{{ prestation.description }}</p>
+                {% endif %}
+                <div class="options">
+                    {% for option, prix in prestation.get_options.items %}
+                        <div class="option-item">
+                            <span class="option-name">{{ option }}</span>
+                            <span class="option-prix">{{ prix }} FCFA</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'reserver' prestation.id %}" class="btn">Réserver</a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align: center; color: #999; font-size: 1.1rem;">Aucune prestation disponible pour le moment.</p>
+{% endif %}
+{% endblock %}

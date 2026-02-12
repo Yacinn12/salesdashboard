@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Réserver - {{ prestation.nom }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reservation-form {
+        max-width: 500px;
+        margin: 0 auto;
+        animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-group {
+        margin-bottom: 2rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        color: #a67c52;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #f0e6d8;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+        background: #faf9f7;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #d4a574;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+    }
+    
+    .prestation-desc {
+        color: #888;
+        font-style: italic;
+        margin-top: 0.5rem;
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .prestation-info {
+        background: linear-gradient(135deg, #faf9f7 0%, #f5f1eb 100%);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2.5rem;
+        text-align: center;
+        border-left: 4px solid #d4a574;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.1);
+    }
+    
+    .prestation-info h3 {
+        font-family: 'Playfair Display', serif;
+        color: #a67c52;
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .prestation-info .prix {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #d4a574;
+        letter-spacing: 0.5px;
+    }
+    
+    .prestation-info .prix::after {
+        content: '€';
+        font-size: 1.5rem;
+        margin-left: 0.3rem;
+    }
+    
+    .btn-submit {
+        width: 100%;
+        padding: 1.2rem;
+        background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+    }
+    
+    .btn-submit:active {
+        transform: translateY(-1px);
+    }
+    
+    .btn-retour {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: #d4a574;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
+    }
+    
+    .btn-retour:hover {
+        color: #a67c52;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Réserver votre rendez-vous</h2>
+
+<div class="prestation-info">
+    <h3>{{ prestation.nom }}</h3>
+    {% if prestation.description %}
+        <p class="prestation-desc">{{ prestation.description }}</p>
+    {% endif %}
+</div>
+
+<form method="post" class="reservation-form">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="nom">Nom *</label>
+        <input type="text" id="nom" name="nom" required placeholder="Votre nom complet">
+    </div>
+    
+    <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required placeholder="votre@email.com">
+    </div>
+    
+    <div class="form-group">
+        <label for="option">Choisissez une option *</label>
+        <select id="option" name="option" required>
+            <option value="">-- Sélectionnez une option --</option>
+            {% for option, prix in options.items %}
+                <option value="{{ option }}">{{ option }} - {{ prix }} FCFA</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="date_rdv">Date et Heure *</label>
+        <input type="datetime-local" id="date_rdv" name="date_rdv" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="message">Message (optionnel)</label>
+        <textarea id="message" name="message" placeholder="Avez-vous des demandes spéciales?"></textarea>
+    </div>
+    
+    <button type="submit" class="btn-submit">Confirmer la réservation</button>
+    
+    <a href="{% url 'accueil' %}" class="btn-retour">← Retour aux offres</a>
+</form>
+{% endblock %}
