@@ -6,16 +6,21 @@ from dash import Dash, html, dcc, Input, Output, callback
 import dash
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent
+PREFERRED_FILES = ["ong_sahel_avenir_2026.xlsx", "ong_sahel_avenir_2024.xlsx"]
+DATA_FILE = next((BASE_DIR / f for f in PREFERRED_FILES if (BASE_DIR / f).is_file()), None)
 # ── Données ───────────────────────────────────────────────────────────────────
-DATA_FILE = "ong_sahel_avenir_2024.xlsx"
+if DATA_FILE is not None:
+    print(f"ℹ️ Chargement des données depuis {DATA_FILE}")
+else:
+    print(f"⚠️  Aucun fichier trouvé dans {BASE_DIR} ({', '.join(PREFERRED_FILES)}), génération de données de démonstration.")
 
-if Path(DATA_FILE).is_file():
+if DATA_FILE:
     df_act    = pd.read_excel(DATA_FILE, sheet_name="Activités")
     df_budget = pd.read_excel(DATA_FILE, sheet_name="Budget")
     df_impact = pd.read_excel(DATA_FILE, sheet_name="Impact régional")
 else:
-    print(f"⚠️  {DATA_FILE} introuvable, génération de données de démonstration.")
-    regions = ["Dakar", "Thiès", "Saint-Louis", "Ziguinchor", "Kolda", "Kaolack", "Fatick", "Matam"]
+    regions = ["Dakar", "Thiès", "Saint-Louis", "Ziguinchor", "Kolda", "Kaolack", "Fatick", "Matam","M'bour","Louga","Tambacounda","Kédougou"]
     activites = ["Semences", "Irrigation", "Formation", "Santé", "Education"]
     mois_num = list(range(1, 13))
 
@@ -106,7 +111,7 @@ app.layout = html.Div(style={"background": DARK, "minHeight": "100vh", "fontFami
     }, children=[
         html.Div([
             html.H1("Tableau de Bord de Pilotage", style={"color": WHITE, "fontSize": "1.35rem", "fontWeight": "600", "margin": "0 0 3px"}),
-            html.P("ONG Sahel Avenir · Programme Sécurité Alimentaire & Nutrition · Sénégal 2024",
+            html.P("ONG Sahel Avenir · Programme Sécurité Alimentaire & Nutrition · Sénégal 2026",
                    style={"color": "rgba(159,225,203,0.85)", "fontSize": "0.78rem", "margin": 0}),
         ]),
         html.Div([
@@ -143,7 +148,7 @@ app.layout = html.Div(style={"background": DARK, "minHeight": "100vh", "fontFami
     ]),
 
     # KPIs
-    html.Div(id="kpis", style={"display": "grid", "gridTemplateColumns": "repeat(5,1fr)", "gap": "12px", "padding": "1.25rem 2rem 0"}),
+    html.Div(id="kpis", style={"display": "grid", "gridTemplateColumns": "repeat(6,1fr)", "gap": "12px", "padding": "1.25rem 2rem 0"}),
 
     # Charts Row 1
     html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "16px", "padding": "1.25rem 2rem 0"}, children=[
@@ -219,6 +224,7 @@ def update(region, activite, mois_range):
         kpi("Bénéficiaires atteints", f"{total_realises:,}", f"sur {total_planifies:,} planifiés", TEAL_M, TEAL_M),
         kpi("Taux de réalisation",    f"{taux_real:.1f}%",  "vs objectif programme", TEAL_L if taux_real >= 90 else AMBER, TEAL_M),
         kpi("Dépenses cumulées",      f"{fmt_fcfa(total_dep)} FCFA", f"sur 850M budget total", WHITE, PURPLE),
+        kpi("Ecart budgétaire",       f"{fmt_fcfa(ecart_budget)} FCFA", f"{fmt_fcfa(total_plan_b)} budget planifié", RED if ecart_budget > 0 else TEAL_M, RED if ecart_budget > 0 else TEAL_M),
         kpi("Taux d'absorption",      f"{taux_absorp:.1f}%", "du budget programme", AMBER, AMBER),
         kpi("Régions couvertes",      str(nb_regions),      "sur 8 régions cibles", TEAL_L, TEAL),
     ]
