@@ -1,0 +1,193 @@
+/* ── Reset & Base ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Navigation scrollable (mobile) ───────────────────────────────────── */
+.nav-tabs {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+/* ── Toast animation ───────────────────────────────────────────────────── */
+@keyframes slideInRight {
+  from { transform: translateX(60px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.toast-item { animation: slideInRight 0.22s ease; }
+
+/* ── Tables défilantes sur mobile ──────────────────────────────────────── */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Sidebar SuperAdmin cachée sur mobile ──────────────────────────────── */
+.sa-sidebar  { transition: transform 0.25s ease; }
+.sa-mobile-nav { display: none; }
+
+@media (max-width: 900px) {
+  .sa-sidebar     { display: none !important; }
+  .sa-main        { margin-left: 0 !important; padding: 16px !important; }
+  .sa-mobile-nav  { display: flex !important; }
+}
+
+/* ── SuperAdmin mobile nav bar ─────────────────────────────────────────── */
+.sa-mobile-nav {
+  position: sticky;
+  top: 64px;
+  z-index: 99;
+  background: #fff;
+  border-bottom: 1px solid #e0e8f0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 8px;
+}
+.sa-mobile-nav::-webkit-scrollbar { display: none; }
+.sa-mobile-nav-inner {
+  display: flex;
+  gap: 4px;
+  padding: 8px 0;
+  min-width: max-content;
+}
+.sa-mobile-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.sa-mobile-nav-btn.active {
+  background: #1e2d3a;
+  color: #fff;
+  font-weight: 700;
+}
+.sa-mobile-nav-btn:not(.active) {
+  background: #f0f4f8;
+  color: #555;
+}
+
+/* ── Grilles responsive ─────────────────────────────────────────────────── */
+
+/* KPI 4 colonnes → 2 → 1 */
+.kpi-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .kpi-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .kpi-4 { grid-template-columns: 1fr 1fr; gap: 10px; } }
+
+/* KPI 3 colonnes → 2 → 1 */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
+@media (max-width: 400px) { .stats-grid { grid-template-columns: 1fr; } }
+
+/* Graphiques côte à côte → colonne */
+.chart-grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) {
+  .chart-grid-2 { grid-template-columns: 1fr; }
+  .chart-grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .chart-grid-2 { grid-template-columns: 1fr; }
+  .chart-grid-3 { grid-template-columns: 1fr; }
+}
+
+/* Commander : produits + panier en colonne */
+.commander-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+@media (max-width: 760px) { .commander-grid { grid-template-columns: 1fr; } }
+
+/* Plans d'abonnement */
+.plans-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+@media (max-width: 500px) { .plans-grid { grid-template-columns: 1fr; } }
+
+/* Fournisseurs cards */
+.suppliers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+@media (max-width: 600px) { .suppliers-grid { grid-template-columns: 1fr; } }
+
+/* Grille 2 colonnes générique */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* Formulaire inscription */
+.auth-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 500px) { .auth-row2 { grid-template-columns: 1fr; } }
+
+/* Panneaux split (commandes, utilisateurs) */
+.split-panel { display: grid; gap: 20px; }
+.split-panel.with-detail { grid-template-columns: 1fr 360px; }
+.split-panel.no-detail   { grid-template-columns: 1fr; }
+@media (max-width: 900px) {
+  .split-panel.with-detail { grid-template-columns: 1fr; }
+}
+
+/* Abonnements clients table */
+.abn-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Filtres wrappables ──────────────────────────────────────────────────── */
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+
+/* ── Panneaux sticky → relatifs sur mobile ──────────────────────────────── */
+@media (max-width: 900px) {
+  .detail-panel {
+    position: relative !important;
+    top: 0 !important;
+    max-height: none !important;
+  }
+}
+
+/* ── Modal responsive ───────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .invoice-modal {
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    max-height: 95vh !important;
+  }
+  .invoice-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+}
+
+/* ── Formulaires achat (3 col → 1) ─────────────────────────────────────── */
+.pch-form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 700px) { .pch-form-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .pch-form-grid { grid-template-columns: 1fr; } }
+
+/* Ligne article achat (4 col → 3 col → 2 col) */
+.pch-item-row { display: grid; grid-template-columns: 2fr 80px 100px auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+@media (max-width: 600px) { .pch-item-row { grid-template-columns: 1fr 70px 90px auto; } }
+@media (max-width: 480px) { .pch-item-row { grid-template-columns: 1fr 60px; } }
+
+/* ── Stock table scroll ─────────────────────────────────────────────────── */
+.stock-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Calendrier card actions ────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .cal-card { flex-direction: column !important; }
+  .cal-actions { flex-direction: row !important; flex-wrap: wrap; }
+}
+
+/* ── Nav admin (scrollable sur petit écran) ─────────────────────────────── */
+.admin-nav-tabs { display: flex; gap: 8px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.admin-nav-tabs::-webkit-scrollbar { display: none; }
+
+/* ── Textes tronqués sur petits écrans ──────────────────────────────────── */
+@media (max-width: 480px) {
+  .hide-xs { display: none !important; }
+  .text-xs-sm { font-size: 11px !important; }
+}
+
+/* ── Padding réduit sur mobile ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page-pad { padding: 16px 12px !important; }
+}
+
+/* ── Profil client cartes stats ─────────────────────────────────────────── */
+.profile-stats { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+/* ── Formulaire récurrent grid ──────────────────────────────────────────── */
+.rsub-freq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 500px) { .rsub-freq-grid { grid-template-columns: 1fr; } }

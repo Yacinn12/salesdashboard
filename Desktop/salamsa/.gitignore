@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# production build
+build/
+
+# environment variables (NE JAMAIS COMMITER)
+.env
+.env.local
+.env.*.local
+
+# logs
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# editor
+.vscode/
